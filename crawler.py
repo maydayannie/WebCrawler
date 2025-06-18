@@ -46,11 +46,19 @@ def main():
         driver.implicitly_wait(3)
 
         elements = driver.find_elements(By.XPATH, "//span[contains(text(), 'MacBook Air 搭配 Apple M4 晶片')]")
-        messages = "\n".join([e.text for e in elements]) if elements else "❌ 查無符合條件的商品"
+
+        # messages = "\n".join([e.text for e in elements]) if elements else "❌ 查無符合條件的商品"
+
+        if elements:
+            messages=''
+            for i, element in enumerate(elements, start=1):
+                messages+=f"{i}{element.text}\n"
+        else:
+            messages=("❌ 查無符合條件的商品")
 
         send_line_push(
             user_id=os.getenv("LINE_USER_ID"),
-            message=f"📦 Costco MacBook Air 查詢結果：\n{messages}",
+            message=f"📦 Costco MacBook Air 今日查詢結果：\n{messages}",
             token=os.getenv("LINE_CHANNEL_TOKEN")
         )
     finally:
