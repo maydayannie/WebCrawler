@@ -43,32 +43,36 @@ def main():
     driver = webdriver.Chrome(service=service, options=options)  # ✅ 使用正確方式建立 driver
 
     try:
-        # driver.get("https://www.costco.com.tw/search?searchOption=tw-search-all&text=macbook%20air")
-        driver.get("https://www.costco.com.tw/search?text=televisions&searchOption=tw-search-all")
+        driver.get("https://www.costco.com.tw/search?searchOption=tw-search-all&text=macbook%20air")
+        driver.implicitly_wait(5)
         # WebDriverWait(driver, 20).until(
         #     EC.presence_of_element_located((By.CLASS_NAME, "is-initialized"))
         # )
-        WebDriverWait(driver, 30).until(
-            # EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'MacBook Air')]"))
-            EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'TV')]"))
-        )
-        driver.implicitly_wait(3)
 
-        # elements = driver.find_elements(By.XPATH, "//span[contains(text(), 'MacBook Air 搭配 Apple M4 晶片')]")
-        elements = driver.find_elements(By.XPATH, "//span[contains(text(), '顯示器')]")
+        # 檢查是否出現「查無結果」圖片
+        no_result = driver.find_elements(By.XPATH, '//img[@src="/mediapermalink/noresultpage"]')
 
-        # messages = "\n".join([e.text for e in elements]) if elements else "❌ 查無符合條件的商品"
-
-        if elements:
-            messages=''
-            for i, element in enumerate(elements, start=1):
-                messages+=f"{i}.{element.text}\n"
+        if no_result:
+            messages = ("❌ 查無符合條件的商品")
         else:
-            messages=("❌ 查無符合條件的商品")
+            WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'MacBook Air')]"))
+
+            )
+            driver.implicitly_wait(3)
+
+            elements = driver.find_elements(By.XPATH, "//span[contains(text(), 'MacBook Air 搭配 Apple M4 晶片')]")
+
+            if elements:
+                messages=''
+                for i, element in enumerate(elements, start=1):
+                    messages+=f"{i}.{element.text}\n"
+            else:
+                messages=("❌ 查無符合條件的商品")
 
         send_line_push(
             user_id=os.getenv("LINE_USER_ID"),
-            message=f"📦 Costco TV 今日查詢結果：\n{messages}",
+            message=f"📦 Costco Macbook Air 今日查詢結果：\n{messages}",
             token=os.getenv("LINE_CHANNEL_TOKEN")
         )
     finally:
