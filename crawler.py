@@ -53,7 +53,7 @@ def main():
         no_result = driver.find_elements(By.XPATH, '//img[@src="/mediapermalink/noresultpage"]')
 
         if no_result:
-            messages = ("❌ No matching products found.")
+            messages = ("❌ No matching products found!")
         else:
             WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'MacBook Air')]"))
@@ -68,7 +68,7 @@ def main():
                 for i, element in enumerate(elements, start=1):
                     messages+=f"{i}.{element.text}\n"
             else:
-                messages=("❌ No matching products found.")
+                messages=("❌ No matching products found!")
 
         send_line_push(
             user_id=os.getenv("LINE_USER_ID"),
