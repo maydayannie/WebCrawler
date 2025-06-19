@@ -49,7 +49,7 @@ def main():
         #     EC.presence_of_element_located((By.CLASS_NAME, "is-initialized"))
         # )
 
-        # 檢查是否出現「查無結果」圖片
+        # Check if the "No results" image appears
         no_result = driver.find_elements(By.XPATH, '//img[@src="/mediapermalink/noresultpage"]')
 
         if no_result:
