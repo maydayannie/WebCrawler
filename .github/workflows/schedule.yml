@@ -22,11 +22,6 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Install Chrome dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y chromium-chromedriver
-
       - name: Run crawler
         env:
           LINE_CHANNEL_TOKEN: ${{ secrets.LINE_CHANNEL_TOKEN }}
