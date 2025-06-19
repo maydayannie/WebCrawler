@@ -39,8 +39,8 @@ def main():
     # driver = webdriver.Chrome(options=options)
     # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
-    service = Service(ChromeDriverManager().install())  # ✅ 建立 Service 物件
-    driver = webdriver.Chrome(service=service, options=options)  # ✅ 使用正確方式建立 driver
+    service = Service(ChromeDriverManager().install())  # 建立 Service 物件
+    driver = webdriver.Chrome(service=service, options=options)  # 使用正確方式建立 driver
 
     try:
         driver.get("https://www.costco.com.tw/search?searchOption=tw-search-all&text=macbook%20air")
@@ -53,7 +53,7 @@ def main():
         no_result = driver.find_elements(By.XPATH, '//img[@src="/mediapermalink/noresultpage"]')
 
         if no_result:
-            messages = ("❌ 查無符合條件的商品")
+            messages = ("❌ No matching products found.")
         else:
             WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'MacBook Air')]"))
@@ -68,11 +68,11 @@ def main():
                 for i, element in enumerate(elements, start=1):
                     messages+=f"{i}.{element.text}\n"
             else:
-                messages=("❌ 查無符合條件的商品")
+                messages=("❌ No matching products found.")
 
         send_line_push(
             user_id=os.getenv("LINE_USER_ID"),
-            message=f"📦 Costco Macbook Air 今日查詢結果：\n{messages}",
+            message=f"📦 Costco Macbook Air - Today's results：\n{messages}",
             token=os.getenv("LINE_CHANNEL_TOKEN")
         )
     finally:
