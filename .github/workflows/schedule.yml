@@ -2,8 +2,8 @@ name: Daily MacBook Air Crawler
 
 on:
   schedule:
-    - cron: '50 4 * * *'  # 台灣中午 12:50（UTC+8 -> UTC 04:50）
-    - cron: '55 4 * * *'  # 台灣中午 12:45（UTC+8 -> UTC 04:45）
+    - cron: '0 2 * * *'  # Every day in Taiwan at 10 am（UTC+8)
+    - cron: '0 9 * * *'  # Every day in Taiwan at 5 p.m. （UTC+8)
   workflow_dispatch:
 
 jobs:
